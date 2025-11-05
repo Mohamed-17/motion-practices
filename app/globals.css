@@ -120,3 +120,14 @@
     @apply bg-background text-foreground;
   }
 }
+.animated-element {
+  animation: fadeOut 5s ease;
+}
+@keyframes fadeOut {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}

@@ -1,12 +1,9 @@
-import Sidebar from "@/components/Sidebar";
-import Tabs from "@/components/Tabs";
 import React from "react";
-
+import SelectBox from "@/components/SelectBox";
 function HomePage() {
   return (
-    <div className="bg-neutral-800 h-screen w-full flex flex-col gap-20 justify-center items-center">
-      <Tabs />
-     
+    <div className="bg-[#080a0f]  w-full flex flex-col h-screen gap-20 justify-center items-center">
+      <SelectBox />
     </div>
   );
 }
