@@ -1,5 +1,6 @@
 "use client";
 import { AnimatePresence, Reorder, motion } from "framer-motion";
+import { X } from "lucide-react";
 import React, { useState } from "react";
 
 const Staticitems: {
@@ -38,6 +39,7 @@ const Staticitems: {
     checked: false,
   },
 ];
+
 function SelectBox() {
   const [items, setItems] = useState(Staticitems);
   function toggleCheck(id: number) {
@@ -49,60 +51,122 @@ function SelectBox() {
       )
     );
   }
+  function deleteSingleItem(id: number) {
+    setItems(items.filter((item) => item.id !== id));
+  }
 
   return (
     <div className="bg-[#0c0f14] w-150 h-150 border border-gray-400/50 rounded-xl p-5">
-      <div className="text-white tracking-wide font-semibold">
-        Select With Mo 🤷‍♂️
+      <div className="flex justify-between items-center">
+        <motion.div
+          initial={{
+            filter: "blur(10px)",
+            opacity: 0,
+            scale: 0.2,
+          }}
+          animate={{
+            filter: "blur(0px)",
+            opacity: 1,
+            scale: 1,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 140,
+            mass: 0.8,
+          }}
+          className="text-white tracking-wide font-semibold"
+        >
+          Select With Mo 🤷‍♂️
+        </motion.div>
+        <motion.button
+          initial={{
+            scale: 0.5,
+            rotateZ: 15,
+            opacity: 0.5,
+          }}
+          animate={{
+            scale: 1,
+            rotateZ: 0,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
+          onClick={() => setItems(Staticitems)}
+          className="text-white border border-gray-500/50 px-5 py-2 rounded text-sm cursor-pointer select-none"
+        >
+          Reset
+        </motion.button>
       </div>
       <Reorder.Group
         values={items}
         onReorder={setItems}
         axis="y"
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut",
+        }}
         className="flex flex-col gap-8 mt-10"
       >
         {items.map((item) => (
           <Reorder.Item
             key={item.id}
-            layout="position"
-            animate={{
-              width: item.checked ? 400 : 500,
+            layout
+            style={{
+              width: item.checked ? "400px" : "500px",
             }}
             transition={{
-              layout: {
-                duration: 0.7,
+              width: {
+                duration: 0.3,
                 ease: "easeInOut",
               },
-              width: {
-                duration: 0.7,
+              layout: {
+                duration: 0.3,
                 ease: "easeInOut",
               },
             }}
             id="myCheckbox"
             value={item}
-            className={`flex cursor-grab relative bg-[#0c0f14] justify-center items-center gap-8 `}
+            className={`flex cursor-grab rounded-xl text-white/50 border border-gray-400/50 relative bg-[#0c0f14] justify-start  items-center gap-8 `}
           >
-            <div className="border p-3 border-gray-400/50 rounded-xl text-white/50 flex-1 flex gap-5">
-              <input
+            <motion.div
+              initial={false}
+              animate={false}
+              className="relative w-[400px] p-3   flex gap-5"
+            >
+              <motion.input
+                whileHover={{
+                  boxShadow: "1px 1px 23px blue ",
+                }}
                 type="checkbox"
                 onChange={() => toggleCheck(item.id)}
-                className="appearance-none  checked:before:1s mt-0.5 w-5 h-5 bg-black checked:bg-blue-500  checked:before:content-['✓'] checked:before:text-xs checked:before:text-white checked:before:flex checked:before:items-center checked:before:justify-center  rounded border border-gray-400/50"
+                className="appearance-none cursor-pointer   checked:before:1s mt-0.5 w-5 h-5 bg-black checked:bg-blue-500  checked:before:content-['✓'] checked:before:text-xs checked:before:text-white checked:before:flex checked:before:items-center checked:before:justify-center  rounded border border-gray-400/50"
               />
 
-              <h4>{item.title}</h4>
-            </div>
+              <div className="relative">
+                <motion.h4
+                  layout="position"
+                  className="whitespace-nowrap overflow-hidden text-ellipsis flex-1"
+                >
+                  {item.title}
+                </motion.h4>
+              </div>
+            </motion.div>
             <AnimatePresence>
               {item.checked && (
                 <motion.div
-                  exit={{ opacity: 0 }}
+                  onClick={() => deleteSingleItem(item.id)}
+                  exit={{ opacity: 0, filter: "blur(10px)" }}
                   transition={{
-                    duration: 0.4,
+                    duration: 0.3,
+                    ease: "easeInOut",
                   }}
-                  className={`absolute right-10 ${
+                  className={`absolute -right-10 ${
                     item.checked ? "block" : "hidden"
                   } text-sm text-white`}
                 >
-                  X
+                  <X size={18} className="text-gray-600 cursor-pointer" />
                 </motion.div>
               )}
             </AnimatePresence>
